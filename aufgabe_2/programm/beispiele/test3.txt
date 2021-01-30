@@ -1,0 +1,19 @@
+9 9
+Kiwi
+Conrad
+Sharmaine
+Lelon
+Erik
+Jakob
+Hermann
+Johannes
+David
+Kiwi Conrad 6
+Sharmaine Erik 4
+Hermann Johannes 2
+David Lelon 5
+David Johannes 3
+Erik David 5
+Jakob Sharmaine 4
+Jakob Hermann 7
+Conrad Jakob 10

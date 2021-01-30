@@ -1,0 +1,86 @@
+\documentclass[12pt]{scrartcl}
+
+\usepackage{listings}
+\usepackage{color}
+
+\lstdefinestyle{input}{
+  frame=lines,
+  aboveskip=3mm,
+  belowskip=3mm,
+  basicstyle={\small\ttfamily},
+}
+
+\lstdefinestyle{c++}{
+  language=C++,
+  frame=lines,
+  aboveskip=3mm,
+  belowskip=3mm,
+  basicstyle={\small\ttfamily},
+  keywordstyle=\color{blue}\ttfamily,
+  stringstyle=\color{green}\ttfamily,
+}
+
+\title{Aufgabe 1 --- Ameisen}
+\subtitle{Dokumentation}
+\author{Julius Makowski}
+\date{}
+
+\begin{document}
+  \maketitle
+
+  \section{Einleitung}
+    Die programmatische L{\"o}sung f{\"u}r diese Aufgabe ist in C++ geschrieben und basiert auf dem in der Theorie beschriebenen Ansatz.
+
+  \section{L{\"o}sung}
+    \subsection{Eingabe / Ausgabe}
+      Da zu der Aufgabe keine genaueren Vorgaben gegeben wurden, habe ich ein eigenes Konzept zur Eingabe sowie Ausgabe der L{\"o}sung entworfen. Dieses wird im Folgenden beschrieben.
+      
+      \vspace{12pt}\noindent
+      Die Eingabe erfolgt durch den stdin der Konsole. Allgemein ist der Input so aufgebaut:
+
+      \vspace{12pt}
+      \begin{lstlisting}[style=input]
+      <Breite in cm> <Anzahl Ameisen>
+      <Standort in cm> <Blickrichtung (0 = Rechts, 1 = Links)>
+      ...
+      ... Anzahl Ameisen
+      ...
+      <Standort in cm> <Blickrichtung (0 = Rechts, 1 = Links)>
+      \end{lstlisting}
+
+      \vspace{12pt}\noindent
+      Beispiele k{\"o}nnen im Programmordner gefunden werden.
+
+      \vspace{12pt}\noindent
+      Die Ausgabe erfolgt als eine einzelne Zeile mit der Testdauer in Sekunden.
+
+    \pagebreak
+
+    \subsection{Funktionsweise}
+      Das Programm errechnet beim Einlesen des Inputs den Abstand jeder Ameise zu der ihr gegen{\"u}berliegenden Kante
+      
+      \vspace{12pt}
+      \begin{lstlisting}[style=c++]
+      int currentDistance = direction ? position
+                                      : width - position;
+      \end{lstlisting}
+
+      \vspace{12pt}\noindent
+      und vergleicht diesen mit dem aktuell h{\"o}chsten ermittelten Abstand
+
+      \vspace{12pt}
+      \begin{lstlisting}[style=c++]
+      if (aktuellerAbstand > maximaleDistanz)
+        maximaleDistanz = aktuellerAbstand;
+      \end{lstlisting}
+
+      \vspace{12pt}\noindent
+      Dadurch wird letzendlich die h{\"o}chste Distanz ermittelt und die Dauer des Tests berechnet und ausgegeben.
+
+      \vspace{12pt}
+      \begin{lstlisting}[style=c++]
+      int time = maxDistance * 0.6;
+      cout << time << endl;
+      \end{lstlisting}
+
+\end{document}

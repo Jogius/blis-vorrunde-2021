@@ -1,0 +1,126 @@
+\documentclass[12pt]{scrartcl}
+
+\usepackage{listings}
+\usepackage{color}
+
+\lstdefinestyle{input}{
+  frame=lines,
+  aboveskip=3mm,
+  belowskip=3mm,
+  basicstyle={\small\ttfamily},
+}
+
+\lstdefinestyle{c++}{
+  language=C++,
+  frame=lines,
+  aboveskip=3mm,
+  belowskip=3mm,
+  basicstyle={\small\ttfamily},
+  keywordstyle=\color{blue}\ttfamily,
+  stringstyle=\color{green}\ttfamily,
+}
+
+\title{Aufgabe 2 --- Oma's Weihnachtskarten}
+\subtitle{Dokumentation}
+\author{Julius Makowski}
+\date{}
+
+\begin{document}
+  \maketitle
+
+  \section{Einleitung}
+    Die programmatische L{\"o}sung f{\"u}r diese Aufgabe ist in C++ geschrieben und basiert auf dem in der Theorie beschriebenen Ansatz.
+
+  \section{L{\"o}sung}
+    \subsection{Eingabe / Ausgabe}
+      Das Format der Eingabe sowie der Ausgabe entsprechen dem in der Aufgabe vorgegebenen Format.
+
+      \vspace{12pt}\noindent
+      Die Eingabe erfolgt dabei durch den stdin der Konsole.
+
+      \vspace{12pt}\noindent
+      Beispiele k{\"o}nnen im Programmordner gefunden werden.
+
+    \pagebreak
+
+    \subsection{Funktionsweise}
+      Das Programm lie{\ss}t zuerst alle \textit{n} Senioren ein. Dabei nutzt es eine Zuornungstabelle, um dem jeweiligen Namen eine ID von einem leichter nutzbaren Datentyp (\textit{Integer}) zuzuordnen.
+      
+      \vspace{12pt}
+      \begin{lstlisting}[style=c++]
+      int n, m;
+      cin >> n >> m;
+      
+      unordered_map<string, int> ids;
+      for (int i = 0; i < n; i++)
+      {
+        string name;
+        cin >> name;
+        ids[name] = i;
+      }
+      \end{lstlisting}
+
+      \vspace{12pt}\noindent
+      Anschlie{\ss}end lie{\ss}t es alle \textit{m} Kanten ein und speichert diese in einem \textit{Array}. Daf{\"u}r nutzt es eine simple Datenstruktur \textit{Kante}, in der \textit{Quelle}, \textit{Ziel} sowie \textit{Gewicht} der jeweiligen Kante gespeichert werden.
+
+      \vspace{12pt}
+      \begin{lstlisting}[style=c++]
+      struct Kante
+      {
+        int quelle, ziel, gewicht;
+      };
+      \end{lstlisting}
+
+      \vspace{12pt}
+      \begin{lstlisting}[style=c++]
+      vector<Kante> graph;
+      for (int i = 0; i < m; i++)
+      {
+        string quelle, ziel;
+        int gewicht;
+        cin >> quelle >> ziel >> gewicht;
+
+        graph.push_back({ids[quelle], ids[ziel], gewicht});
+      }
+      \end{lstlisting}
+
+      \pagebreak
+
+      \vspace{12pt}\noindent
+      Nun kann der tats{\"a}chliche Algorithmus gestartet werden. Daf{\"u}r werden zuerst Variablen zum Speichern der L{\"o}sung, des Grades der aktuell bearbeiteten Kante sowie eine Union-Find-Struktur f{\"u}r die \textit{n} Knoten.
+
+      \vspace{12pt}
+      \begin{lstlisting}[style=c++]
+      int besteSumme = numeric_limits<int>::max();
+      vector<Kante> loesung;
+      
+      vector<int> grad(n);
+      grad[0] = 1;
+      
+      UnionFind uf(n);
+      
+      solve(graph, 0, 0, loesung, grad, uf, besteSumme);
+      \end{lstlisting}
+
+      \vspace{12pt}\noindent
+      In der \textit{solve} Methode wird zuerst der R{\"u}ckkehrpunkt f{\"u}r die Funktion definiert. Dies tritt ein, wenn der letzte Knoten bearbeitet wurde, also \textit{index} gleich \textit{n}. Wenn die Anzahl der Kanten in der L{\"o}sung der Gesamtanzahl an Knoten entspricht, ist auf dem Weg keine L{\"o}sung m{\"o}glich, das Gewicht der L{\"o}sung wird auf $\infty$ gesetzt. Wenn die L{\"o}sung ein geringeres Gewicht als die bisher beste L{\"o}sung hat, wird sie als neue beste L{\"o}sung deklariert.
+
+      \vspace{12pt}
+      \begin{lstlisting}[style=c++]
+      if (index == kanten.size())
+      {
+        if (loesung.size() + 1 < uf.kanten.size())
+          summe = numeric_limits<int>::max();
+        if (besteSumme > summe)
+          besteSumme = summe;
+        return;
+      }
+      \end{lstlisting}
+
+      \vspace{12pt}\noindent
+      Anschlie{\ss}end wird {\"u}berpr{\"u}ft, wie fortgeschritten werden muss. Dazu wird sichergegangen, dass in der dezeitigen L{\"o}sung noch keine Kante zum Ziel der aktuellen Kante f{\"u}hrt (\textit{grad = 0}). Weiterhin d{\"u}rfen sich Quelle und Ziel nicht in der gleichen Gruppe der Union-Find-Struktur befinden - in diesen F{\"a}llen wird einfach mit der n{\"a}chsten Kante fortgefahren. Andernfalls werden Quelle und Ziel der gleichen Gruppe hinzugef{\"u}gt, der Grad des aktuellen Ziels erh{\"o}ht, das Gewicht der aktuellen Kante zur Gesamtsumme hinzugef{\"u}gt und anschlie{\ss}end probiert, mit diesen Parametern eine neue, bessere L{\"o}sung zu finden. 
+
+      \vspace{12pt}\noindent
+      Die letzendlich beste gefundene L{\"o}sung wird ausgegeben.
+
+\end{document}

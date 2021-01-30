@@ -1,0 +1,13 @@
+5 7
+Gerda
+Friedrich
+Ernst
+Achim
+Helge
+Gerda Friedrich 1
+Gerda Ernst 3
+Gerda Helge 4
+Friedrich Ernst 1
+Friedrich Achim 2
+Helge Achim 4
+Ernst Helge 5
